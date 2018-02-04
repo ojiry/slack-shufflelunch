@@ -1,4 +1,4 @@
-class Slack::CommandsController < ApplicationController
+class Slack::SlashCommandsController < ApplicationController
   def create
     logger.info params.inspect
     render json: json
@@ -30,6 +30,12 @@ class Slack::CommandsController < ApplicationController
               "style": "danger",
               "type": "button",
               "value": "leave"
+            },
+            {
+              "name": "action",
+              "text": "Finish",
+              "type": "button",
+              "value": "finish"
             }
           ]
         }
