@@ -1,10 +1,17 @@
 class Slack::SlashCommandsController < ApplicationController
   def create
-    logger.info params.inspect
+    user = User.find_or_create_by(user_id: params[:user_id]) do |u|
+      u.user_name = params[:user_name]
+    end
+    @lunch = user.lunches.create(lunch_params)
     render json: json
   end
 
   private
+
+  def lunch_params
+    params.permit(:token, :team_id, :team_domain, :channel_id, :channel_name)
+  end
 
   def json
     {
@@ -13,7 +20,7 @@ class Slack::SlashCommandsController < ApplicationController
         {
           "text": "Choose a game to play",
           "fallback": "You are unable to choose a game",
-          "callback_id": "wopr_game",
+          "callback_id": @lunch.id,
           "color": "#3AA3E3",
           "attachment_type": "default",
           "actions": [
@@ -33,9 +40,9 @@ class Slack::SlashCommandsController < ApplicationController
             },
             {
               "name": "action",
-              "text": "Finish",
+              "text": "Suffle",
               "type": "button",
-              "value": "finish"
+              "value": "suffle"
             }
           ]
         }
