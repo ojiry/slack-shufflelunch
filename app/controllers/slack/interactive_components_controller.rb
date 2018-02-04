@@ -22,7 +22,7 @@ class Slack::InteractiveComponentsController < ApplicationController
   end
 
   def payload_params
-    JSON.parse(params[:payload])
+    JSON.parse(params[:payload]).with_indifferent_access
   end
 
   def suffle_json
