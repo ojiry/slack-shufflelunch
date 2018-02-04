@@ -6,9 +6,11 @@ class Slack::InteractiveComponentsController < ApplicationController
     end
     case payload_params[:actions].first[:value]
     when 'join'
-      @lunch.participations.create(user: user)
+      if @lunch.participations.none? { |p| p.user_id == user.id }
+        @lunch.participations.create(user: user)
+      end
     when 'leave'
-      @lunch.participations.destroy_all(user: user)
+      @lunch.participations.where(user_id: user.id).destroy_all
     when 'suffle'
       render json: suffle_json and return
     end
