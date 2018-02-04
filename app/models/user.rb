@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   has_many :group_members
-  has_many :groups, through: :group_members, source: :user
+  has_many :groups, through: :group_members, source: :group
   has_many :lunches
   has_many :participations
 

@@ -3,7 +3,7 @@ class Lunch < ApplicationRecord
 
   has_many :groups
   has_many :participations
-  has_many :users, through: :participations, source: :lunch
+  has_many :users, through: :participations, source: :user
 
   validates :token, presence: true
   validates :team_id, presence: true
