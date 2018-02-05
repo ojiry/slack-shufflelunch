@@ -12,6 +12,7 @@ class Slack::InteractiveComponentsController < ApplicationController
     when 'leave'
       @lunch.participations.where(user_id: user.id).destroy_all
     when 'suffle'
+      @lunch.suffle
       render json: suffle_json and return
     end
     render json: json
