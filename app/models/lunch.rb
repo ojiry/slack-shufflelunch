@@ -5,7 +5,6 @@ class Lunch < ApplicationRecord
   has_many :participations
   has_many :users, through: :participations, source: :user
 
-  validates :token, presence: true
   validates :team_id, presence: true
   validates :team_domain, presence: true
   validates :channel_id, presence: true

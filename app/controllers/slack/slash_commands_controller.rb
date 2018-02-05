@@ -10,7 +10,7 @@ class Slack::SlashCommandsController < ApplicationController
   private
 
   def lunch_params
-    params.permit(:token, :team_id, :team_domain, :channel_id, :channel_name)
+    params.permit(:team_id, :team_domain, :channel_id, :channel_name)
   end
 
   def json

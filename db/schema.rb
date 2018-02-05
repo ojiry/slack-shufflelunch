@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_02_05_140023) do
+ActiveRecord::Schema.define(version: 2018_02_05_152642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(version: 2018_02_05_140023) do
   end
 
   create_table "lunches", force: :cascade do |t|
-    t.string "token", null: false
     t.string "team_id", null: false
     t.string "team_domain", null: false
     t.string "channel_id", null: false
