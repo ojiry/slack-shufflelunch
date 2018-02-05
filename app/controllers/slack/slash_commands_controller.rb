@@ -15,7 +15,7 @@ class Slack::SlashCommandsController < ApplicationController
 
   def json
     {
-      "text": "Would you like to join the Suffle Lunch today?",
+      "text": "Would you like to join the Shuffle Lunch today?",
       "attachments": [
         {
           "text": "Choose a game to play",
@@ -40,9 +40,9 @@ class Slack::SlashCommandsController < ApplicationController
             },
             {
               "name": "action",
-              "text": "Suffle",
+              "text": "Shuffle",
               "type": "button",
-              "value": "suffle"
+              "value": "shuffle"
             }
           ]
         }

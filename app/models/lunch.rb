@@ -38,6 +38,6 @@ class Lunch < ApplicationRecord
       # end
       update!(shuffled_at: Time.current)
     end
-    return shuffled.at.present?
+    return shuffled_at.present?
   end
 end

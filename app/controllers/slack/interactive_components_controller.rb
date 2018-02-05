@@ -11,9 +11,12 @@ class Slack::InteractiveComponentsController < ApplicationController
       end
     when 'leave'
       @lunch.participations.where(user_id: user.id).destroy_all
-    when 'suffle'
-      @lunch.suffle
-      render json: suffle_json and return
+    when 'shuffle'
+      if @lunch.shuffle
+        render json: shuffle_json and return
+      else
+        render json: json
+      end
     end
     render json: json
   end
@@ -28,7 +31,7 @@ class Slack::InteractiveComponentsController < ApplicationController
     JSON.parse(params[:payload]).with_indifferent_access
   end
 
-  def suffle_json
+  def shuffle_json
     {
       "text": "Finish"
     }.to_json
@@ -36,7 +39,7 @@ class Slack::InteractiveComponentsController < ApplicationController
 
   def json
     {
-      "text": "Would you like to join the Suffle Lunch today? #{@lunch.users.map(&:user_name).join(',')}",
+      "text": "Would you like to join the Shuffle Lunch today? #{@lunch.users.map(&:user_name).join(',')}",
       "attachments": [
         {
           "text": "Choose a game to play",
@@ -61,9 +64,9 @@ class Slack::InteractiveComponentsController < ApplicationController
             },
             {
               "name": "action",
-              "text": "Suffle",
+              "text": "Shuffle",
               "type": "button",
-              "value": "suffle"
+              "value": "shuffle"
             }
           ]
         }
