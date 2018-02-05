@@ -16,6 +16,7 @@ class Slack::SlashCommandsController < ApplicationController
   def json
     {
       "text": "Would you like to join the Shuffle Lunch today?",
+      "response_type": "in_channel",
       "attachments": [
         {
           "text": "Choose a game to play",

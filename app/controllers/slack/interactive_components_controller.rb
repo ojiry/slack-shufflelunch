@@ -33,13 +33,15 @@ class Slack::InteractiveComponentsController < ApplicationController
 
   def shuffle_json
     {
-      "text": "Finish"
+      "text": "Finish",
+      "response_type": "in_channel",
     }.to_json
   end
 
   def json
     {
       "text": "Would you like to join the Shuffle Lunch today? #{@lunch.users.map(&:user_name).join(',')}",
+      "response_type": "in_channel",
       "attachments": [
         {
           "text": "Choose a game to play",
