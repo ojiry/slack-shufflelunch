@@ -10,6 +10,17 @@ class Lunch < ApplicationRecord
   validates :channel_id, presence: true
   validates :channel_name, presence: true
 
+  def json_result
+    text = ""
+    groups.each do |group|
+      text << "#{group.name}: #{group.users.map(&:user_name).join(', ')}\n"
+    end
+    {
+      "text": text,
+      "response_type": "in_channel",
+    }.to_json
+  end
+
   def previous_lunch
     @previous_lunch ||= self.class
       .where(team_id: team_id, channel_id: channel_id)

@@ -13,7 +13,7 @@ class Slack::InteractiveComponentsController < ApplicationController
       @lunch.participations.where(user_id: user.id).destroy_all
     when 'shuffle'
       if @lunch.shuffle
-        render json: shuffle_json and return
+        render json: @lunch.json_result and return
       else
         render json: json
       end
@@ -29,13 +29,6 @@ class Slack::InteractiveComponentsController < ApplicationController
 
   def payload_params
     JSON.parse(params[:payload]).with_indifferent_access
-  end
-
-  def shuffle_json
-    {
-      "text": "Finish",
-      "response_type": "in_channel",
-    }.to_json
   end
 
   def json
