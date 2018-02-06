@@ -13,7 +13,7 @@ class Lunch < ApplicationRecord
   def json_result
     text = ""
     groups.each do |group|
-      text << "#{group.name}: #{group.users.map(&:user_name).join(', ')}\n"
+      text << "#{group.name}: #{group.users.map { |u| "<@#{u.user_id}>" }.join(', ')}\n"
     end
     {
       "text": text,
