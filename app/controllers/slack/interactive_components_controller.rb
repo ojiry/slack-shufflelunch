@@ -1,10 +1,10 @@
 class Slack::InteractiveComponentsController < ApplicationController
-  def create
-    return head(:forbidden) unless payload_params[:token] == Rails.configuration.x.slack.verification_token
+  before_action :valid_slack_token
+  before_action :set_lunch
 
-    @lunch = Lunch.find(payload_params[:callback_id])
-    user = User.find_or_create_by(user_id: user_params[:id]) do |u|
-      u.user_name = user_params[:name]
+  def create
+    user = User.find_or_create_by!(user_id: payload_params[:user][:id]) do |u|
+      u.user_name = payload_params[:user][:name]
     end
     case payload_params[:actions].first[:value]
     when 'join'
@@ -14,23 +14,27 @@ class Slack::InteractiveComponentsController < ApplicationController
     when 'leave'
       @lunch.participations.where(user_id: user.id).destroy_all
     when 'shuffle'
-      if @lunch.shuffle!
-        render json: @lunch.json_result and return
-      else
-        render json: json
-      end
+      group_builder = GroupBuilder.new(@lunch)
+      group_builder.build!
+      render json: group_builder.to_json and return
     end
     render json: json
   end
 
   private
 
-  def user_params
-    payload_params[:user]
-  end
-
   def payload_params
     JSON.parse(params[:payload]).with_indifferent_access
+  end
+
+  def set_lunch
+    @lunch = Lunch.find(payload_params[:callback_id])
+  end
+
+  def valid_slack_token
+    unless payload_params[:token] == Rails.configuration.x.slack.verification_token
+      return head(:forbidden)
+    end
   end
 
   def json

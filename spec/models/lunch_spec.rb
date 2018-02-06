@@ -17,17 +17,4 @@ RSpec.describe Lunch, type: :model do
 
     it { is_expected.to eq previous_lunch }
   end
-
-  describe '#shuffle!' do
-    let(:lunch) { create :lunch }
-
-    subject { -> { lunch.shuffle! } }
-
-    before do
-      10.times { |i| create :participation, lunch: lunch }
-    end
-
-    it { is_expected.to change { [Group.count, GroupMember.count] }.from([0, 0]).to([2, 10]) }
-    it { is_expected.to change { lunch.reload.shuffled_at }.from(be_nil).to(be_present) }
-  end
 end

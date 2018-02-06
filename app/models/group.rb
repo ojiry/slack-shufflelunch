@@ -5,4 +5,8 @@ class Group < ApplicationRecord
   has_many :users, through: :group_members, source: :user
 
   validates :name, presence: true, uniqueness: { scope: :lunch_id }
+
+  def text
+    "#{name}: #{users.map { |u| "<@#{u.user_id}>" }.join(', ')}"
+  end
 end
