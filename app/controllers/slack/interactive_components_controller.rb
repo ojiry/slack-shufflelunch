@@ -1,5 +1,7 @@
 class Slack::InteractiveComponentsController < ApplicationController
   def create
+    return head(:forbidden) unless payload_params[:token] == Rails.configuration.x.slack.verification_token
+
     @lunch = Lunch.find(payload_params[:callback_id])
     user = User.find_or_create_by(user_id: user_params[:id]) do |u|
       u.user_name = user_params[:name]

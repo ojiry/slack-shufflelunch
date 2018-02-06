@@ -1,5 +1,7 @@
 class Slack::SlashCommandsController < ApplicationController
   def create
+    return head(:forbidden) unless params[:token] == Rails.configuration.x.slack.verification_token
+
     user = User.find_or_create_by(user_id: params[:user_id]) do |u|
       u.user_name = params[:user_name]
     end
