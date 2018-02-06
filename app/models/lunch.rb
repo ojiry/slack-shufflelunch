@@ -30,17 +30,22 @@ class Lunch < ApplicationRecord
   end
 
   def shuffle
-    ActiveRecord::Base.transaction do
-      member_count = participations.count
-      group_count = member_count < 4 ? 1 : member_count / 4
-      arr = []
-      1.upto group_count do |i|
-        arr << groups.create!(name: "Group#{i}")
+    member_count = participations.count
+    return false if member_count.zero?
+    divresult = member_count.divmod(4)
+    group_count, slice_count =
+      if divresult.first.zero?
+        [1, 4]
+      else
+        divresult.last.zero? ? [divresult.first, 4] : [divresult.first, 5]
       end
+    arr = []
+    ActiveRecord::Base.transaction do
+      1.upto(group_count) { |i| arr << groups.create!(name: "Group#{i}") }
       # if previous_lunch
       #   # noop
       # else
-        users.shuffle.each_slice(group_count).with_index do |slice, index|
+        users.shuffle.each_slice(slice_count).with_index do |slice, index|
           slice.each do |user|
             arr[index].group_members.create!(user: user)
           end
