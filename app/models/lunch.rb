@@ -29,7 +29,7 @@ class Lunch < ApplicationRecord
       .order(created_at: :desc).first
   end
 
-  def shuffle
+  def shuffle!
     member_count = participations.count
     return false if member_count.zero?
     divresult = member_count.divmod(4)

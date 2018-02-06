@@ -1,47 +1,32 @@
-class Slack::InteractiveComponentsController < ApplicationController
-  def create
-    return head(:forbidden) unless payload_params[:token] == Rails.configuration.x.slack.verification_token
+class LunchBuilder
+  def initialize(params)
+    @params = params
+  end
 
-    @lunch = Lunch.find(payload_params[:callback_id])
-    user = User.find_or_create_by(user_id: user_params[:id]) do |u|
-      u.user_name = user_params[:name]
-    end
-    case payload_params[:actions].first[:value]
-    when 'join'
-      if @lunch.participations.none? { |p| p.user_id == user.id }
-        @lunch.participations.create(user: user)
+  def build!
+    ActiveRecord::Base.transaction do
+      user = User.find_or_create_by!(user_id: params[:user_id]) do |u|
+        u.user_name = params[:user_name]
       end
-    when 'leave'
-      @lunch.participations.where(user_id: user.id).destroy_all
-    when 'shuffle'
-      if @lunch.shuffle!
-        render json: @lunch.json_result and return
-      else
-        render json: json
+      @lunch = user.lunches.create! do |l|
+        l.team_id      = params[:team_id]
+        l.team_domain  = params[:team_domain]
+        l.channel_id   = params[:channel_id]
+        l.channel_name = params[:channel_name]
       end
     end
-    render json: json
+    true
   end
 
-  private
-
-  def user_params
-    payload_params[:user]
-  end
-
-  def payload_params
-    JSON.parse(params[:payload]).with_indifferent_access
-  end
-
-  def json
+  def to_json
     {
-      "text": "Would you like to join the Shuffle Lunch today? #{@lunch.users.map { |u| "<@#{u.user_id}>" }.join(', ')}",
+      "text": "Would you like to join the Shuffle Lunch today?",
       "response_type": "in_channel",
       "attachments": [
         {
           "text": "Please put join or leave button",
           "fallback": "Your current Slack client doesn’t support Shuffle Lunch",
-          "callback_id": @lunch.id,
+          "callback_id": lunch&.id,
           "color": "#3AA3E3",
           "attachment_type": "default",
           "actions": [
@@ -76,4 +61,8 @@ class Slack::InteractiveComponentsController < ApplicationController
       ]
     }.to_json
   end
+
+  private
+
+  attr_reader :lunch, :params
 end

@@ -18,10 +18,10 @@ RSpec.describe Lunch, type: :model do
     it { is_expected.to eq previous_lunch }
   end
 
-  describe '#shuffle' do
+  describe '#shuffle!' do
     let(:lunch) { create :lunch }
 
-    subject { -> { lunch.shuffle } }
+    subject { -> { lunch.shuffle! } }
 
     before do
       10.times { |i| create :participation, lunch: lunch }
