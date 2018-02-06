@@ -11,7 +11,7 @@ class Lunch < ApplicationRecord
   validates :channel_name, presence: true
 
   def json_result
-    text = ""
+    text = "Shuffle lunch group of today\n"
     groups.each do |group|
       text << "#{group.name}: #{group.users.map { |u| "<@#{u.user_id}>" }.join(', ')}\n"
     end
@@ -41,7 +41,7 @@ class Lunch < ApplicationRecord
       end
     arr = []
     ActiveRecord::Base.transaction do
-      1.upto(group_count) { |i| arr << groups.create!(name: "Group#{i}") }
+      1.upto(group_count) { |i| arr << groups.create!(name: "#{i}group") }
       # if previous_lunch
       #   # noop
       # else
