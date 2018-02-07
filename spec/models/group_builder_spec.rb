@@ -6,12 +6,25 @@ RSpec.describe GroupBuilder, type: :model do
 
   describe '#build!' do
     before do
-      10.times { |i| create :participation, lunch: lunch }
+      create_list :participation, 10, lunch: lunch
     end
 
     it { expect(group_builder.build!).to be true }
 
     it { expect { group_builder.build! }.to change { [Group.count, GroupMember.count] }.from([0, 0]).to([3, 10]) }
+
+    context 'when lunch has #previous_lunch' do
+      let(:previous_lunch) { create :lunch, :shuffled, team_id: lunch.team_id, channel_id: lunch.channel_id, created_at: lunch.created_at.days_ago(1) }
+
+      before do
+        create_list :participation, 6, lunch: previous_lunch
+        GroupBuilder.new(previous_lunch).build!
+      end
+
+      it { expect(group_builder.build!).to be true }
+
+      it { expect { group_builder.build! }.to change { [Group.count, GroupMember.count] }.from([2, 6]).to([5, 16]) }
+    end
   end
 
   describe '#group_count' do

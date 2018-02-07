@@ -9,19 +9,22 @@ class GroupBuilder
     ActiveRecord::Base.transaction do
       1.upto(group_count) { |i| lunch.groups.create!(name: "#{i}group") }
       groups = lunch.groups.order(:name)
-      # if previous_lunch
-      #   # noop
-      # else
+      user_ids = lunch.users.pluck(:id)
+      if previous_lunch
+        previous_user_ids = previous_lunch.groups.order(:name).flat_map { |group| group.group_members.pluck(:user_id) }
+        user_ids = (previous_user_ids & user_ids) + (user_ids - previous_user_ids)
+      else
+        user_ids = user_ids.shuffle
+      end
       index = 0
-      lunch.users.shuffle.each do |user|
-        groups[index].group_members.create!(user: user)
+      user_ids.shuffle.each do |user_id|
+        groups[index].group_members.create!(user_id: user_id)
         if index == group_count - 1
           index = 0
         else
           index += 1
         end
       end
-      # end
       lunch.update!(shuffled_at: Time.current)
     end
     true
