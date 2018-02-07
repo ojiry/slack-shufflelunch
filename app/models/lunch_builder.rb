@@ -14,6 +14,7 @@ class LunchBuilder
         l.channel_id   = params[:channel_id]
         l.channel_name = params[:channel_name]
       end
+      @lunch.participations.create!(user: user)
     end
     @lunch
   end
