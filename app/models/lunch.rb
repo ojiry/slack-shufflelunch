@@ -10,11 +10,19 @@ class Lunch < ApplicationRecord
   validates :channel_id, presence: true
   validates :channel_name, presence: true
 
+  def participant_ids_text
+    users.map { |user| "<@#{user.user_id}>" }.join(', ')
+  end
+
   def previous_lunch
     @previous_lunch ||= self.class
       .where(team_id: team_id, channel_id: channel_id)
       .where.not(shuffled_at: nil)
       .where('created_at < ?', created_at)
       .order(created_at: :desc).first
+  end
+
+  def shuffled?
+    !!shuffled_at
   end
 end

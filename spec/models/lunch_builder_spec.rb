@@ -14,7 +14,7 @@ RSpec.describe LunchBuilder, type: :model do
     }
     let(:lunch_builder) { LunchBuilder.new(params) }
 
-    it { expect(lunch_builder.build!).to be true }
+    it { expect(lunch_builder.build!).to be_a(Lunch) }
 
     it { expect { lunch_builder.build! }.to change { User.count }.by(1).and change { Lunch.count }.by(1) }
 

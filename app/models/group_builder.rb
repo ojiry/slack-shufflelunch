@@ -30,13 +30,6 @@ class GroupBuilder
     true
   end
 
-  def to_json
-    {
-      "text": "Shuffle lunch group of today\n#{lunch.groups.map(&:text).join("\n")}",
-      "response_type": "in_channel",
-    }.to_json
-  end
-
   private
 
   attr_reader :lunch
