@@ -1,24 +1,23 @@
-# README [![CircleCI](https://circleci.com/gh/ojiry/slack-shufflelunch.svg?style=svg)](https://circleci.com/gh/ojiry/slack-shufflelunch)
+# Let's try shuffle lunch
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+[![CircleCI](https://circleci.com/gh/ojiry/slack-shufflelunch.svg?style=svg)](https://circleci.com/gh/ojiry/slack-shufflelunch)
 
-Things you may want to cover:
+## What's this?
 
-* Ruby version
+It's a Slack Slash Commands that randomly shuffles people into small lunch groups.
 
-* System dependencies
+![slack-shufflelunch](https://user-images.githubusercontent.com/409323/35897201-5ba44724-0c03-11e8-944a-d61d97efc360.png)
 
-* Configuration
+## Usage
 
-* Database creation
+Enter `/lunchshuffle` in any channel to start a lunch shuffle in that channel.
 
-* Database initialization
+## Deployment
 
-* How to run the test suite
+TODO
 
-* Services (job queues, cache servers, search engines, etc.)
+## Environment Variables
 
-* Deployment instructions
+### SLACK_VERIFICATION_TOKEN (required)
 
-* ...
+Slack verification token.
