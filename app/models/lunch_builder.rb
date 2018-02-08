@@ -14,11 +14,9 @@ class LunchBuilder
         l.channel_id   = params[:channel_id]
         l.channel_name = params[:channel_name]
       end
-      @lunch.participations.create!(user: user)
-      users = User.where(user_name: preset_user_names).where.not(id: user.id)
+      users = User.where(user_name: preset_user_names)
       users.each { |u| @lunch.participations.create!(user: u) }
       (preset_user_names - users.map(&:user_name)).each do |user_name|
-        next if user_name == user.user_name
         user_info = slack_client.users_info(user: "@#{user_name}").user
         user2 = User.find_or_create_by!(user_id: user_info.id) do |u|
           u.user_name = user_info.name
