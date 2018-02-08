@@ -32,7 +32,7 @@ class LunchBuilder
   attr_reader :params
 
   def preset_user_names
-    text.split.map { |user_name| user_name.delete('@') }
+    text.split.map { |user_name| user_name.delete('@') }.uniq
   end
 
   def slack_client
