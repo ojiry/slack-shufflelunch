@@ -25,7 +25,7 @@ class Slack::InteractiveComponentsController < ApplicationController
 
   def valid_slack_token
     unless payload_params[:token] == Rails.configuration.x.slack.verification_token
-      return head(:forbidden)
+      head :forbidden
     end
   end
 end

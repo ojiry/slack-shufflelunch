@@ -10,8 +10,8 @@ class Slack::SlashCommandsController < ApplicationController
   private
 
   def valid_slack_token
-    unless params[:token] == Rails.configuration.x.slack.verification_token
-      return head(:forbidden)
+    if params[:token] != Rails.configuration.x.slack.verification_token
+      head :forbidden
     end
   end
 end
