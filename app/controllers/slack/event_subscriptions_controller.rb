@@ -9,7 +9,7 @@ class Slack::EventSubscriptionsController < ApplicationController
   private
 
   def valid_text
-    unless /\A<@#{User.find_by_username(Rails.configuration.x.slack.bot_username).user_id}>/.match?(params[:text])
+    unless /\A<@#{User.find_by(user_name: Rails.configuration.x.slack.bot_username).user_id}>/.match?(params[:text])
       head :ok
     end
   end
