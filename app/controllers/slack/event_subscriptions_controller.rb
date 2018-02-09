@@ -2,8 +2,8 @@ class Slack::EventSubscriptionsController < ApplicationController
   before_action :valid_slack_token, :valid_challenge, :valid_text
 
   def create
-    slack_bot = SlackBot.new(params)
-    render json: slack_bot.to_json
+    Slack::Web::Client.new.chat_postMessage(channel: params[:event]['channel'], text: 'Hi!')
+    head :ok
   end
 
   private
@@ -22,7 +22,7 @@ class Slack::EventSubscriptionsController < ApplicationController
 
   def valid_slack_token
     if params[:token] != Rails.configuration.x.slack.verification_token
-      head :forbidden 
+      head :forbidden
     end
   end
 end
