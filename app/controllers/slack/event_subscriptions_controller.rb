@@ -1,12 +1,18 @@
 class Slack::EventSubscriptionsController < ApplicationController
-  before_action :valid_slack_token
-  before_action :valid_challenge
+  before_action :valid_slack_token, :valid_challenge, :valid_text
 
   def create
-    render json: { } # TODO
+    slack_bot = SlackBot.new(params)
+    render json: slack_bot.to_json
   end
 
   private
+
+  def valid_text
+    unless /\A<@#{User.find_by_username(Rails.configuration.x.slack.bot_username).user_id}>/.match?(params[:text])
+      head :ok
+    end
+  end
 
   def valid_challenge
     if params[:type] == 'url_verification'
