@@ -2,7 +2,7 @@ class Slack::EventSubscriptionsController < ApplicationController
   before_action :valid_slack_token, :valid_challenge, :valid_text
 
   def create
-    Slack::Web::Client.new.chat_postMessage(channel: params[:event]['channel'], text: 'Hi!')
+    # Slack::Web::Client.new.chat_postMessage(channel: params[:event]['channel'], text: 'Hi!')
     head :ok
   end
 
