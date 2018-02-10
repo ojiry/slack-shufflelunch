@@ -1,27 +1,23 @@
 require 'rails_helper'
 
-RSpec.describe Slack::SlashCommandsController, type: :controller do
+RSpec.describe Slack::EventSubscriptionsController, type: :controller do
   describe 'POST create' do
     subject { response }
 
+    let(:bot) { create :user }
     let(:token) { 'valid_token' }
     let(:params) {
       {
         token: token,
-        team_id: "XXXXXXXXXXXX",
-        team_domain: "muddydixon",
-        channel_id: "XXXXXXXXXXX",
-        channel_name: "general",
-        user_id: "XXXXXXXXXXXX",
-        user_name: "muddydixon",
-        command: "/shufflelunch",
-        text: "",
-        response_url: "https://hooks.slack.com/commands/XXXXXXXXX/XXXXXXX/XXXXXXXXXXX"
+        event: {
+          text: ""
+        }
       }
     }
 
     before do
       allow(Rails.configuration.x.slack).to receive(:verification_token) { 'valid_token' }
+      allow(Rails.configuration.x.slack).to receive(:bot_username) { bot.user_name }
       post :create, params: params
     end
 
