@@ -1,22 +1,19 @@
 class Slack::EventSubscriptionsController < ApplicationController
-  before_action :valid_challenge, :valid_text
+  before_action :verify_challenge
 
   def create
-    # Slack::Web::Client.new.chat_postMessage(channel: params[:event]['channel'], text: 'Hi!')
+    if params[:type] == 'message'
+      bot = SlackBot.new(slack_bot_username, params)
+      bot.reply
+    end
     head :ok
   end
 
   private
 
-  def valid_text
-    unless /\A<@#{User.find_by(username: Rails.configuration.x.slack.bot_username).slack_id}>/.match?(params[:event][:text])
-      head :ok
+    def verify_challenge
+      if params[:type] == 'url_verification'
+        render json: { challenge: params[:challenge] }
+      end
     end
-  end
-
-  def valid_challenge
-    if params[:type] == 'url_verification'
-      render json: { challenge: params[:challenge] }
-    end
-  end
 end
