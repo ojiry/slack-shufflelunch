@@ -9,8 +9,7 @@ class SlackBot
     Slack::Web::Client.new.chat_postMessage(
       channel: params[:event]['channel'],
       text: 'Would you like to join the Shuffle Lunch today?',
-      attachments: test_message,
-      as_user: true
+      attachments: test_message
     )
   end
 
