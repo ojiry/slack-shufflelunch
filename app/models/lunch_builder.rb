@@ -5,23 +5,24 @@ class LunchBuilder
 
   def build!
     ActiveRecord::Base.transaction do
-      user = User.find_or_create_by!(user_id: params[:user_id]) do |u|
-        u.user_name = params[:user_name]
-      end
       team = Team.find_or_create_by!(slack_id: params[:team_id]) do |t|
         t.domain = params[:team_domain]
       end
-      channel = Channel.find_or_create_by!(slack_id: params[:channel_id]) do |c|
+      channel = team.channels.find_or_create_by!(slack_id: params[:channel_id]) do |c|
         c.name = params[:channel_name]
       end
-
+      user = User.find_or_create_by!(slack_id: params[:user_id]) do |u|
+        u.username = params[:user_name]
+        u.team = team
+      end
       @lunch = user.lunches.create!(channel_id: channel.id)
-      users = User.where(user_name: preset_user_names)
+      users = User.where(username: preset_usernames)
       users.each { |u| @lunch.participations.create!(user: u) }
-      (preset_user_names - users.map(&:user_name)).each do |user_name|
-        user_info = slack_client.users_info(user: "@#{user_name}").user
-        user2 = User.find_or_create_by!(user_id: user_info.id) do |u|
-          u.user_name = user_info.name
+      (preset_usernames - users.map(&:username)).each do |username|
+        user_info = slack_client.users_info(user: "@#{username}").user
+        user2 = User.find_or_create_by!(slack_id: user_info.id) do |u|
+          u.username = user_info.name
+          u.team = team
         end
         @lunch.participations.create!(user: user2)
       end
@@ -33,8 +34,8 @@ class LunchBuilder
 
   attr_reader :params
 
-  def preset_user_names
-    text.split.map { |user_name| user_name.delete('@') }.uniq
+  def preset_usernames
+    text.split.map { |username| username.delete('@') }.uniq
   end
 
   def slack_client
