@@ -9,7 +9,7 @@ class Lunch < ApplicationRecord
   scope :shuffled, -> { where.not(shuffled_at: nil) }
 
   def participant_ids_text
-    users.map { |user| "<@#{user.user_id}>" }.join(', ')
+    users.map { |user| "<@#{user.slack_id}>" }.join(', ')
   end
 
   def previous_lunch

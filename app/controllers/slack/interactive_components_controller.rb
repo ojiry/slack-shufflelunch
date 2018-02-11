@@ -1,8 +1,12 @@
 class Slack::InteractiveComponentsController < ApplicationController
   def create
     lunch = Lunch.find(payload_params[:callback_id])
-    user = User.find_or_create_by!(user_id: payload_params[:user][:id]) do |u|
-      u.user_name = payload_params[:user][:name]
+    team = Team.find_or_create_by!(slack_id: payload_params[:team][:id]) do |t|
+      t.domain = payload_params[:team][:domain]
+    end
+    user = User.find_or_create_by!(slack_id: payload_params[:user][:id]) do |u|
+      u.username = payload_params[:user][:name]
+      u.team = team
     end
     case payload_params[:actions].first[:value]
     when 'join'
