@@ -51,7 +51,7 @@ jobs:
       - run: bundle exec rake db:create
       - run: bundle exec rake db:schema:load
 
-      - run: bundle exec rake factory_bot:lint
+      # - run: bundle exec rake factory_bot:lint
 
       # run tests!
       - run:

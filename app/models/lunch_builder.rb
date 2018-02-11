@@ -8,12 +8,14 @@ class LunchBuilder
       user = User.find_or_create_by!(user_id: params[:user_id]) do |u|
         u.user_name = params[:user_name]
       end
-      @lunch = user.lunches.create! do |l|
-        l.team_id      = params[:team_id]
-        l.team_domain  = params[:team_domain]
-        l.channel_id   = params[:channel_id]
-        l.channel_name = params[:channel_name]
+      team = Team.find_or_create_by!(slack_id: params[:team_id]) do |t|
+        t.domain = params[:team_domain]
       end
+      channel = Channel.find_or_create_by!(slack_id: params[:channel_id]) do |c|
+        c.name = params[:channel_name]
+      end
+
+      @lunch = user.lunches.create!(channel_id: channel.id)
       users = User.where(user_name: preset_user_names)
       users.each { |u| @lunch.participations.create!(user: u) }
       (preset_user_names - users.map(&:user_name)).each do |user_name|

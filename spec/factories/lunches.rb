@@ -1,9 +1,6 @@
 FactoryBot.define do
   factory :lunch do
-    team_id "T0001"
-    team_domain "otaku-dev"
-    channel_id "C2147483705"
-    channel_name "general"
+    channel null
     user
 
     trait :shuffled do
