@@ -10,17 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_02_11_133037) do
+ActiveRecord::Schema.define(version: 2018_02_11_135302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "channels", force: :cascade do |t|
-    t.string "slack_id"
-    t.string "name"
-    t.bigint "team_id"
+    t.string "slack_id", null: false
+    t.string "name", null: false
+    t.bigint "team_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["slack_id"], name: "index_channels_on_slack_id", unique: true
     t.index ["team_id"], name: "index_channels_on_team_id"
   end
 
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(version: 2018_02_11_133037) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "shuffled_at"
+    t.index ["channel_id"], name: "index_lunches_on_channel_id"
     t.index ["user_id"], name: "index_lunches_on_user_id"
   end
 
@@ -60,27 +62,30 @@ ActiveRecord::Schema.define(version: 2018_02_11_133037) do
   end
 
   create_table "teams", force: :cascade do |t|
-    t.string "slack_id"
-    t.string "domain"
+    t.string "slack_id", null: false
+    t.string "domain", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["slack_id"], name: "index_teams_on_slack_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "user_id", null: false
-    t.string "user_name", null: false
+    t.string "slack_id", null: false
+    t.string "username", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "team_id"
+    t.integer "team_id", null: false
+    t.index ["slack_id"], name: "index_users_on_slack_id", unique: true
     t.index ["team_id"], name: "index_users_on_team_id"
-    t.index ["user_id"], name: "index_users_on_user_id", unique: true
   end
 
   add_foreign_key "channels", "teams"
   add_foreign_key "group_members", "groups"
   add_foreign_key "group_members", "users"
   add_foreign_key "groups", "lunches"
+  add_foreign_key "lunches", "channels"
   add_foreign_key "lunches", "users"
   add_foreign_key "participations", "lunches"
   add_foreign_key "participations", "users"
+  add_foreign_key "users", "teams"
 end
