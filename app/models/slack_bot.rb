@@ -6,11 +6,13 @@ class SlackBot
 
   def reply
     return unless mention?
-    Slack::Web::Client.new.chat_postMessage(
-      channel: params[:event]['channel'],
-      text: 'Would you like to join the Shuffle Lunch today?',
-      attachments: test_message
-    )
+    if false
+      Slack::Web::Client.new.chat_postMessage(
+        channel: params[:event]['channel'],
+        text: 'Would you like to join the Shuffle Lunch today?',
+        attachments: test_message
+      )
+    end
   end
 
   private
