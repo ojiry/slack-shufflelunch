@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :lunch do
-    channel null
+    channel
     user
 
     trait :shuffled do

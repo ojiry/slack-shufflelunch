@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :channel do
-    slack_id "MyString"
-    name "MyString"
+    sequence(:slack_id) { |n| "U%08#{n}" }
+    name "general"
     team
   end
 end

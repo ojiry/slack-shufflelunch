@@ -1,4 +1,5 @@
 class Lunch < ApplicationRecord
+  belongs_to :channel
   belongs_to :user
 
   has_many :groups

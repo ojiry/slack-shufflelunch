@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :user do
-    sequence(:user_id) { |n| "U%08#{n}" }
-    user_name "otako"
+    sequence(:slack_id) { |n| "U%08#{n}" }
+    username "otako"
+    team
   end
 end

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :team do
-    slack_id "MyString"
-    domain "MyString"
+    sequence(:slack_id) { |n| "U%08#{n}" }
+    domain "otaku-dev"
   end
 end
