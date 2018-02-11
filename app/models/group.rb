@@ -7,6 +7,6 @@ class Group < ApplicationRecord
   validates :name, presence: true, uniqueness: { scope: :lunch_id }
 
   def text
-    "#{name}: #{users.map { |user| "<@#{user.user_id}>" }.join(', ')}"
+    "#{name}: #{users.map { |user| "<@#{user.slack_id}>" }.join(', ')}"
   end
 end
