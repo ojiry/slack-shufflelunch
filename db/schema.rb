@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_02_05_152642) do
+ActiveRecord::Schema.define(version: 2018_02_11_124211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "channels", force: :cascade do |t|
+    t.string "slack_id"
+    t.string "name"
+    t.bigint "team_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_channels_on_team_id"
+  end
 
   create_table "group_members", force: :cascade do |t|
     t.bigint "group_id", null: false
@@ -53,6 +62,13 @@ ActiveRecord::Schema.define(version: 2018_02_05_152642) do
     t.index ["user_id"], name: "index_participations_on_user_id"
   end
 
+  create_table "teams", force: :cascade do |t|
+    t.string "slack_id"
+    t.string "domain"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "user_id", null: false
     t.string "user_name", null: false
@@ -61,6 +77,7 @@ ActiveRecord::Schema.define(version: 2018_02_05_152642) do
     t.index ["user_id"], name: "index_users_on_user_id", unique: true
   end
 
+  add_foreign_key "channels", "teams"
   add_foreign_key "group_members", "groups"
   add_foreign_key "group_members", "users"
   add_foreign_key "groups", "lunches"
