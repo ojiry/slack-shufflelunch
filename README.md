@@ -14,10 +14,18 @@ Enter `/lunchshuffle` in any channel to start a lunch shuffle in that channel.
 
 ## Deployment
 
-TODO
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## Environment Variables
 
 ### SLACK_VERIFICATION_TOKEN (required)
 
 Slack verification token.
+
+### SLACK_API_TOKEN (required)
+
+Slack API token.
+
+### SLACK_BOT_USERNAME
+
+Slack bot API token.
