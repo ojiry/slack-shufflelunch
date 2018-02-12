@@ -1,34 +1,56 @@
 class SlackBot
-  def initialize(username, params)
-    @user = User.find_by(username: username)
+  def initialize(bot_username, params)
+    @bot = User.find_by!(username: bot_username)
     @params = params
   end
 
   def reply
-    return unless mention?
-    if false
-      Slack::Web::Client.new.chat_postMessage(
-        channel: params[:event]['channel'],
-        text: 'Would you like to join the Shuffle Lunch today?',
-        attachments: test_message
-      )
+    if lunch_request?
+      team = Team.find_or_create_by!(slack_id: params[:team_id]) do |t|
+        t.domain = 'todo'
+      end
+      channel = team.channels.find_or_create_by!(slack_id: params[:event][:channel]) do |c|
+        c.name = 'todo'
+      end
+      user = User.find_or_create_by!(slack_id: params[:event][:user]) do |u|
+        u.username = 'todo'
+        u.team = team
+      end
+      lunch = user.lunches.create!(channel_id: channel.id)
+      post_message(lunch)
     end
+  end
+
+  def post_message(lunch)
+    Slack::Web::Client.new.chat_postMessage(
+      channel: params[:event]['channel'],
+      text: 'Would you like to join the Shuffle Lunch today?',
+      attachments: test_message(lunch)
+    )
   end
 
   private
 
-  attr_reader :params, :user
+  attr_reader :params, :bot
 
-  def mention?
-    /\A<@#{user.slack_id}>/.match?(params[:event][:text])
+  def lunch_request?
+    !!match_data
   end
 
-  def test_message
+  def with_users
+    match_data[1] ? match_data[2] : []
+  end
+
+  def match_data
+    /\A<@#{bot.slack_id}> please create shuffle lunch(.*)/i.match(params[:event][:text])
+  end
+
+  def test_message(lunch)
     [
       {
         "text": "Please put join or leave button",
         "fallback": "Your current Slack client doesn’t support Shuffle Lunch",
-        "callback_id": 1,
+        "callback_id": lunch.id,
         "color": "#3AA3E3",
         "attachment_type": "default",
         "actions": [
