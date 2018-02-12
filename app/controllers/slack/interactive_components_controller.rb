@@ -1,6 +1,9 @@
 class Slack::InteractiveComponentsController < ApplicationController
   def create
     lunch = Lunch.find(payload_params[:callback_id])
+    if lunch.shuffled?
+      render json: { text: 'This lunch has already been shuffled' } and return
+    end
     team = Team.find_or_create_by!(slack_id: payload_params[:team][:id]) do |t|
       t.domain = payload_params[:team][:domain]
     end
