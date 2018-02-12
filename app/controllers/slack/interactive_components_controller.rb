@@ -1,6 +1,9 @@
 class Slack::InteractiveComponentsController < ApplicationController
   def create
-    lunch = Lunch.find(payload_params[:callback_id])
+    lunch = Lunch.find_by(id: payload_params[:callback_id])
+    unless lunch
+      render json: { text: 'This lunch has already been deleted' } and return
+    end
     if lunch.shuffled?
       render json: { text: 'This lunch has already been shuffled' } and return
     end
