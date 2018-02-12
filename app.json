@@ -2,8 +2,8 @@
   "name": "slack-shufflelunch",
   "description": "A Slack commands that randomly shuffles people into small lunch groups",
   "keywords": [
-    "Bot",
-    "Slack"
+    "bot",
+    "slack"
   ],
   "website": "https://github.com/ojiry/slack-shufflelunch",
   "repository": "https://github.com/ojiry/slack-shufflelunch",
@@ -12,7 +12,8 @@
       "description": "Slack API token: https://api.slack.com/docs/token-types#workspace"
     },
     "SLACK_BOT_TOKEN": {
-      "description": "Slack bot API token: https://api.slack.com/docs/token-types#bot"
+      "description": "Slack bot API token: https://api.slack.com/docs/token-types#bot",
+      "required": false
     },
     "SLACK_VERIFICATION_TOKEN": {
       "description": "Slack verification token: https://api.slack.com/docs/token-types#verification_tokens"
