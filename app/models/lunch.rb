@@ -2,8 +2,8 @@ class Lunch < ApplicationRecord
   belongs_to :channel
   belongs_to :user
 
-  has_many :groups
-  has_many :participations
+  has_many :groups, dependent: :destroy
+  has_many :participations, dependent: :destroy
   has_many :users, through: :participations, source: :user
 
   scope :shuffled, -> { where.not(shuffled_at: nil) }
