@@ -16,7 +16,7 @@ class SlackBot
         u.username = 'todo'
         u.team = team
       end
-      lunch = user.lunches.find_or_create_by!(channel_id: channel.id)
+      lunch = user.lunches.find_or_create_by!(channel_id: channel.id, shuffled_at: nil)
       post_message(lunch)
     end
   end
