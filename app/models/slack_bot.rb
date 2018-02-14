@@ -49,7 +49,7 @@ class SlackBot
   end
 
   def usernames
-    args = match_data[1].split.map { |username| username.split.delete('@') }.uniq
+    args = match_data[1].split.map { |username| username.strip.delete('@') }.uniq
     args.shift == 'with' ? args : []
   end
 
