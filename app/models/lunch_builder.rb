@@ -15,7 +15,7 @@ class LunchBuilder
         u.username = params[:user_name]
         u.team = team
       end
-      @lunch = user.lunches.create!(channel_id: channel.id)
+      @lunch = user.lunches.create!(channel_id: channel.id, response_url: params[:response_url])
       users = User.where(username: preset_usernames)
       users.each { |u| @lunch.participations.create!(user: u) }
       (preset_usernames - users.map(&:username)).each do |username|

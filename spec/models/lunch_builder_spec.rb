@@ -9,7 +9,8 @@ RSpec.describe LunchBuilder, type: :model do
         channel_id: 'C001',
         channel_name: 'test',
         user_id: 'U001',
-        user_name: 'otako'
+        user_name: 'otako',
+        response_url: 'http://dummy.url'
       }
     }
     let(:lunch_builder) { LunchBuilder.new(params) }

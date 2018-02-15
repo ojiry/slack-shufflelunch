@@ -6,6 +6,8 @@ class Lunch < ApplicationRecord
   has_many :participations, dependent: :destroy
   has_many :users, through: :participations, source: :user
 
+  validates :response_url, presence: true
+
   scope :shuffled, -> { where.not(shuffled_at: nil) }
 
   def participant_ids_text

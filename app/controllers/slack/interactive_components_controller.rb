@@ -1,7 +1,9 @@
 class Slack::InteractiveComponentsController < ApplicationController
   def create
     lunch = Lunch.find_by(id: payload_params[:callback_id])
-    unless lunch
+    if lunch
+      lunch.update(response_url: payload_params[:response_url])
+    else
       render json: { text: 'This lunch has already been deleted' } and return
     end
     team = Team.find_or_create_by!(slack_id: payload_params[:team][:id]) do |t|

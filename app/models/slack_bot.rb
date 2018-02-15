@@ -16,7 +16,9 @@ class SlackBot
         u.username = 'todo'
         u.team = team
       end
-      lunch = user.lunches.find_or_create_by!(channel_id: channel.id, shuffled_at: nil)
+      lunch = user.lunches.find_or_create_by!(channel_id: channel.id, shuffled_at: nil) do |l|
+        l.response_url = 'http://dummy.url'
+      end
       usernames.each do |username|
         begin
           user_info = slack_client.users_info(user: "@#{username}").user
