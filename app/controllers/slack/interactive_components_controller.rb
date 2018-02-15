@@ -5,7 +5,7 @@ class Slack::InteractiveComponentsController < ApplicationController
       render json: { text: 'This lunch has already been deleted' } and return
     end
     if lunch.shuffled?
-      render json: { text: 'This lunch has already been shuffled' } and return
+      render json: InteractiveComponentBuilder.new(lunch).build and return
     end
     team = Team.find_or_create_by!(slack_id: payload_params[:team][:id]) do |t|
       t.domain = payload_params[:team][:domain]

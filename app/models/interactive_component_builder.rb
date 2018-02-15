@@ -8,6 +8,16 @@ class InteractiveComponentBuilder
       {
         "text": "Shuffle lunch group of today\n#{lunch.groups.map(&:text).join("\n")}",
         "response_type": "in_channel",
+        "attachments": [
+          {
+            "text": "If you can't join Shuffle lunch, please put leave button",
+            "fallback": "Your current Slack client doesn’t support Shuffle Lunch",
+            "callback_id": lunch&.id,
+            "color": "#3AA3E3",
+            "attachment_type": "default",
+            "actions": actions
+          }
+        ]
       }
     else
       {
@@ -33,13 +43,15 @@ class InteractiveComponentBuilder
 
   def actions
     [].tap do |actions|
-      actions << {
-        "name": "action",
-        "text": "Join",
-        "style": "primary",
-        "type": "button",
-        "value": "join"
-      }
+      unless lunch.shuffled?
+        actions << {
+          "name": "action",
+          "text": "Join",
+          "style": "primary",
+          "type": "button",
+          "value": "join"
+        }
+      end
       actions << {
         "name": "action",
         "text": "Leave",
@@ -47,7 +59,7 @@ class InteractiveComponentBuilder
         "type": "button",
         "value": "leave"
       }
-      unless lunch.users.count.zero?
+      unless lunch.shuffled? || lunch.users.count.zero?
         actions << {
           "name": "action",
           "text": "Shuffle",
