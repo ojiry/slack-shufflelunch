@@ -18,7 +18,7 @@ class Slack::InteractiveComponentsController < ApplicationController
       lunch.participations.create(user: user) if lunch.participations.none? { |p| p.user_id == user.id }
     when 'leave'
       lunch.participations.where(user_id: user.id).destroy_all
-      GroupMember.join(group: [:lunch]).merge(Lunch.shuffled.where(id: lunch.id)).where(user_id: user.id).destroy_all
+      GroupMember.joins(group: [:lunch]).merge(Lunch.shuffled.where(id: lunch.id)).where(user_id: user.id).destroy_all
     when 'shuffle'
       render json: InteractiveComponentBuilder.new(lunch).build and return if lunch.shuffled?
       GroupBuilder.new(lunch).build!
