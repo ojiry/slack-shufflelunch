@@ -19,12 +19,20 @@ class LunchBuilder
       users = User.where(username: preset_usernames)
       users.each { |u| @lunch.participations.create!(user: u) }
       (preset_usernames - users.map(&:username)).each do |username|
-        user_info = slack_client.users_info(user: "@#{username}").user
-        user2 = User.find_or_create_by!(slack_id: user_info.id) do |u|
-          u.username = user_info.name
-          u.team = team
+        begin
+          user_info = slack_client.users_info(user: "@#{username}").user
+          user2 = User.find_or_create_by!(slack_id: user_info.id) do |u|
+            u.username = user_info.name
+            u.team = team
+          end
+          @lunch.participations.create!(user: user2)
+        rescue Slack::Web::Api::Errors::SlackError => e
+          if e.to_s == "user_not_found"
+            nil
+          else
+            raise
+          end
         end
-        @lunch.participations.create!(user: user2)
       end
     end
     @lunch
