@@ -6,6 +6,6 @@ class Slack::SlashCommandsController < ApplicationController
       lunch_builder = LunchBuilder.new(params)
       lunch = lunch_builder.build!
     end
-    render json: InteractiveComponentBuilder.new(lunch).build
+    render json: InteractiveComponent.new(lunch).as_json
   end
 end

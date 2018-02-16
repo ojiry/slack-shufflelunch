@@ -41,7 +41,7 @@ class SlackBot
   end
 
   def post_message(lunch)
-    args = InteractiveComponentBuilder.new(lunch).build
+    args = InteractiveComponent.new(lunch).as_json
     args[:channel] = params[:event]['channel']
     Slack::Web::Client.new.chat_postMessage(args)
   end
