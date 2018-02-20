@@ -1,5 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Group, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "#text" do
+    subject { group.text }
+
+    let(:group) { create :group, name: "Group 1" }
+
+    it { is_expected.to eq "Group 1: " }
+  end
 end
