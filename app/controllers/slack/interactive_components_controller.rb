@@ -16,14 +16,14 @@ class Slack::InteractiveComponentsController < ApplicationController
 
     case payload_params[:actions].first[:value]
     when 'join'
-      render json: InteractiveComponent.new(lunch).as_json and return if lunch.shuffled?
-      lunch.participations.create(user: user) if lunch.participations.none? { |p| p.user_id == user.id }
+      if !lunch.shuffled? && lunch.participations.none? { |p| p.user_id == user.id }
+        lunch.participations.create(user: user)
+      end
     when 'leave'
       lunch.participations.where(user_id: user.id).destroy_all
       GroupMember.joins(group: [:lunch]).merge(Lunch.shuffled.where(id: lunch.id)).where(user_id: user.id).destroy_all
     when 'shuffle'
-      render json: InteractiveComponent.new(lunch).as_json and return if lunch.shuffled?
-      GroupBuilder.new(lunch).build!
+      GroupBuilder.new(lunch).build! unless lunch.shuffled?
     end
     render json: InteractiveComponent.new(lunch).as_json
   end
