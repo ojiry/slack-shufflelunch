@@ -52,7 +52,13 @@ RSpec.describe InteractiveComponent, type: :model do
               ok_text: "Yes", dismiss_text: "No"
             }
           },
-          { name: "bye", text: "Bye", type: "button", value: "bye" }
+          {
+            name: "bye", text: "Bye", type: "button", value: "bye", confirm: {
+              title: "Are you sure?",
+              text: "The result will be invisible, but is it good?",
+              ok_text: "Yes", dismiss_text: "No"
+            }
+          }
         ]
       }
 
