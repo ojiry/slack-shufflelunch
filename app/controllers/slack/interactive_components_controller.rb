@@ -27,6 +27,8 @@ class Slack::InteractiveComponentsController < ApplicationController
     when 'reshuffle'
       lunch.groups.destroy_all
       GroupBuilder.new(lunch).build!
+    when 'bye'
+      render json: { text: "See you! :wave:" } and return
     end
     render json: InteractiveComponent.new(lunch).as_json
   end

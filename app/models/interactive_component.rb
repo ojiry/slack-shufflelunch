@@ -55,6 +55,7 @@ class InteractiveComponent
       confirm = { title: "Are you sure?", text: confirm_text, ok_text: "Yes", dismiss_text: "No" }
       buttons << Button.new(button_text, confirm: confirm)
     end
+    buttons << Button.new("Bye") if lunch.shuffled?
     buttons.map(&:as_json)
   end
 

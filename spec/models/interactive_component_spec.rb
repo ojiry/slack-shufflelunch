@@ -51,7 +51,8 @@ RSpec.describe InteractiveComponent, type: :model do
               text: "If you put Reshuffle button, groups will change, right?",
               ok_text: "Yes", dismiss_text: "No"
             }
-          }
+          },
+          { name: "bye", text: "Bye", type: "button", value: "bye" }
         ]
       }
 
