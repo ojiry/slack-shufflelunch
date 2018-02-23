@@ -3,8 +3,8 @@ class ApplicationController < ActionController::API
 
   private
 
-    def payload_params
-      JSON.parse(params[:payload].presence || {}).with_indifferent_access
+    def slack_parameter
+      @slack_parameter ||= Slack::Parameter.parse(params)
     end
 
     def slack_bot_username
@@ -16,8 +16,7 @@ class ApplicationController < ActionController::API
     end
 
     def verify_slack_token
-      token = params[:token].presence || payload_params[:token]
-      if token != slack_verification_token
+      if slack_parameter.token != slack_verification_token
         head :forbidden
       end
     end

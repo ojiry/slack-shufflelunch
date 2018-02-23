@@ -1,56 +1,46 @@
 class LunchBuilder
-  def initialize(params)
-    @params = params
+  def initialize(slack_parameter)
+    @slack_parameter = slack_parameter
   end
 
   def build!
     ActiveRecord::Base.transaction do
-      team = Team.find_or_create_by!(slack_id: params[:team_id]) do |t|
-        t.domain = params[:team_domain]
+      lunch = creator.lunches.create!(channel_id: channel.id, response_url: slack_parameter.response_url)
+      preset_users = User.where(slack_id: preset_usernames_by_slack_id.keys)
+      participated_slack_ids = []
+      preset_users.each do |preset_user|
+        lunch.participations.create!(user: preset_user)
+        participated_slack_ids << preset_user.slack_id
       end
-      channel = team.channels.find_or_create_by!(slack_id: params[:channel_id]) do |c|
-        c.name = params[:channel_name]
+      preset_usernames_by_slack_id.each do |slack_id, preset_username|
+        next if participated_slack_ids.include?(slack_id)
+        user = team.users.create!(slack_id: slack_id, username: preset_username)
+        lunch.participations.create!(user: user)
       end
-      user = User.find_or_create_by!(slack_id: params[:user_id]) do |u|
-        u.username = params[:user_name]
-        u.team = team
-      end
-      @lunch = user.lunches.create!(channel_id: channel.id, response_url: params[:response_url])
-      users = User.where(username: preset_usernames)
-      users.each { |u| @lunch.participations.create!(user: u) }
-      (preset_usernames - users.map(&:username)).each do |username|
-        begin
-          user_info = slack_client.users_info(user: "@#{username}").user
-          user2 = User.find_or_create_by!(slack_id: user_info.id) do |u|
-            u.username = user_info.name
-            u.team = team
-          end
-          @lunch.participations.create!(user: user2)
-        rescue Slack::Web::Api::Errors::SlackError => e
-          if e.to_s == "user_not_found"
-            nil
-          else
-            raise
-          end
-        end
-      end
+      lunch
     end
-    @lunch
   end
 
   private
 
-  attr_reader :params
+    attr_reader :slack_parameter
 
-  def preset_usernames
-    text.split.map { |username| username.delete('@') }.uniq
-  end
+    def channel
+      @channel ||= team.channels.find_or_create_by!(slack_id: slack_parameter.channel_id, name: slack_parameter.channel_name)
+    end
 
-  def slack_client
-    @client ||= Slack::Web::Client.new
-  end
+    def creator
+      @creator ||= team.users.find_or_create_by!(slack_id: slack_parameter.user_id, username: slack_parameter.username)
+    end
 
-  def text
-    params[:text]&.strip || ''
-  end
+    def preset_usernames_by_slack_id
+      slack_parameter.text.strip.split.each_with_object({}) do |preset_username, usernames|
+        slack_id, username = preset_username.delete('<@>').split('|')
+        usernames[slack_id] = username
+      end
+    end
+
+    def team
+      @team ||= Team.find_or_create_by!(slack_id: slack_parameter.team_id, domain: slack_parameter.team_domain)
+    end
 end

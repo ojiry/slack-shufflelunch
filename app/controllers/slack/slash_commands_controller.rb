@@ -1,10 +1,9 @@
 class Slack::SlashCommandsController < ApplicationController
   def create
-    if lunch = Lunch.joins(:channel).where(shuffled_at: nil).find_by(channels: { slack_id: params[:channel_id] })
-      lunch.update(response_url: params[:response_url])
+    if lunch = Lunch.joins(:channel).where(shuffled_at: nil).find_by(channels: { slack_id: slack_parameter.channel_id })
+      lunch.update(response_url: slack_parameter.response_url)
     else
-      lunch_builder = LunchBuilder.new(params)
-      lunch = lunch_builder.build!
+      lunch = LunchBuilder.new(slack_parameter).build!
     end
     render json: Slack::InteractiveComponent.new(lunch).as_json
   end

@@ -15,7 +15,7 @@ RSpec.describe Slack::SlashCommandsController, type: :controller do
         user_id: "XXXXXXXXXXXX",
         user_name: "muddydixon",
         command: "/shufflelunch",
-        text: "",
+        text: "<@U001|otako>",
         response_url: "https://hooks.slack.com/commands/XXXXXXXXX/XXXXXXX/XXXXXXXXXXX"
       }
     }

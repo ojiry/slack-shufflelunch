@@ -1,20 +1,12 @@
 class Slack::InteractiveComponentsController < ApplicationController
   def create
-    lunch = Lunch.find_by(id: payload_params[:callback_id])
+    lunch = Lunch.joins(:channel).where(channels: { slack_id: slack_parameter.channel_id}).find_by(id: slack_parameter.callback_id)
     if lunch
-      lunch.update(response_url: payload_params[:response_url])
+      lunch.update(response_url: slack_parameter.response_url)
     else
       render json: { text: 'This lunch has already been deleted' } and return
     end
-    team = Team.find_or_create_by!(slack_id: payload_params[:team][:id]) do |t|
-      t.domain = payload_params[:team][:domain]
-    end
-    user = User.find_or_create_by!(slack_id: payload_params[:user][:id]) do |u|
-      u.username = payload_params[:user][:name]
-      u.team = team
-    end
-
-    case payload_params[:actions].first[:value]
+    case slack_parameter.actions.first[:value]
     when 'join'
       if !lunch.shuffled? && lunch.participations.none? { |p| p.user_id == user.id }
         lunch.participations.create(user: user)
@@ -32,4 +24,14 @@ class Slack::InteractiveComponentsController < ApplicationController
     end
     render json: Slack::InteractiveComponent.new(lunch).as_json
   end
+
+  private
+
+    def team
+      @team ||= Team.find_or_create_by!(slack_id: slack_parameter.team_id, domain: slack_parameter.team_domain)
+    end
+
+    def user
+      @user ||= team.users.find_or_create_by!(slack_id: slack_parameter.user_id, username: slack_parameter.username)
+    end
 end
