@@ -30,6 +30,6 @@ class Slack::InteractiveComponentsController < ApplicationController
     when 'bye'
       render json: { text: "See you! :wave:" } and return
     end
-    render json: InteractiveComponent.new(lunch).as_json
+    render json: Slack::InteractiveComponent.new(lunch).as_json
   end
 end
