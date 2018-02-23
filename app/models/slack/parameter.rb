@@ -15,7 +15,7 @@ module Slack
     end
 
     def callback_id
-      params[:callback_id].presence || payload_params[:channel_id]
+      params[:callback_id].presence || payload_params[:callback_id]
     end
 
     def channel_id
