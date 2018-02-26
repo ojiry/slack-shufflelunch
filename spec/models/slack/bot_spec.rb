@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SlackBot, type: :model do
+RSpec.describe Slack::Bot, type: :model do
   describe '#reply' do
     subject { -> { slack_bot.reply } }
 
@@ -15,7 +15,7 @@ RSpec.describe SlackBot, type: :model do
         }
       }.with_indifferent_access
     }
-    let(:slack_bot) { SlackBot.new(bot_user.username, params) }
+    let(:slack_bot) { Slack::Bot.new(bot_user.username, params) }
 
     before do
       allow(slack_bot).to receive(:post_message)

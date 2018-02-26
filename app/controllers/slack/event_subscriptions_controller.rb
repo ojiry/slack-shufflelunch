@@ -3,7 +3,7 @@ class Slack::EventSubscriptionsController < ApplicationController
 
   def create
     if params[:event][:type] == 'message'
-      bot = SlackBot.new(slack_bot_username, params)
+      bot = Slack::Bot.new(slack_bot_username, params)
       bot.reply
     end
     head :ok
