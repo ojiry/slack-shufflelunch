@@ -2,9 +2,8 @@ class Slack::EventSubscriptionsController < ApplicationController
   before_action :verify_challenge
 
   def create
-    if params[:event][:type] == 'message'
-      bot = Slack::Bot.new(slack_bot_username, params)
-      bot.reply
+    if slack_parameter.event_type == 'message'
+      Slack::Bot.new(slack_parameter).reply
     end
     head :ok
   end
@@ -12,8 +11,8 @@ class Slack::EventSubscriptionsController < ApplicationController
   private
 
     def verify_challenge
-      if params[:type] == 'url_verification'
-        render json: { challenge: params[:challenge] }
+      if slack_parameter.type == 'url_verification'
+        render json: { challenge: slack_parameter.challenge }
       end
     end
 end

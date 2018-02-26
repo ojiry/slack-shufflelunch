@@ -1,71 +1,40 @@
 module Slack
   class Bot
-    def initialize(bot_username, params)
-      @bot = User.find_by!(username: bot_username)
-      @params = params
+    def initialize(slack_parameter)
+      @bot = User.find_by!(username: Rails.configuration.x.slack.bot_username)
+      @slack_parameter = slack_parameter
     end
 
     def reply
-      if lunch_request?
-        team = Team.find_or_create_by!(slack_id: params[:team_id]) do |t|
-          t.domain = 'todo'
-        end
-        channel = team.channels.find_or_create_by!(slack_id: params[:event][:channel]) do |c|
-          c.name = 'todo'
-        end
-        user = User.find_or_create_by!(slack_id: params[:event][:user]) do |u|
-          u.username = 'todo'
-          u.team = team
-        end
-        lunch = user.lunches.find_or_create_by!(channel_id: channel.id, shuffled_at: nil) do |l|
-          l.response_url = 'http://dummy.url'
-        end
-        usernames.each do |username|
-          begin
-            user_info = slack_client.users_info(user: "@#{username}").user
-            user2 = User.find_or_create_by!(slack_id: user_info.id) do |u|
-              u.username = user_info.name
-              u.team = team
-            end
-            lunch.participations.create!(user: user2)
-          rescue Slack::Web::Api::Errors::SlackError => e
-            if e.to_s == "user_not_found"
-              nil
-            else
-              raise
-            end
-          end
-        end
-
-        post_message(lunch)
+      lunch = Lunch.joins(:channel).where(shuffled_at: nil).find_by(channels: { slack_id: slack_parameter.channel_id })
+      if lunch_creating_request? && !lunch
+        lunch = LunchBuilder.new(slack_parameter).build!
+      elsif lunch_shuffle_request? && !lunch&.shuffled?
+        LunchShuffler.new(lunch).shuffle!
       end
-    end
-
-    def post_message(lunch)
-      args = Slack::InteractiveComponent.new(lunch).as_json
-      args[:channel] = params[:event]['channel']
-      Slack::Web::Client.new.chat_postMessage(args)
+      post_message(lunch)
     end
 
     private
 
-      attr_reader :params, :bot
+      attr_reader :bot, :slack_parameter
 
-      def lunch_request?
-        !!match_data
+      def lunch_creating_request?
+        /\A.*<@#{bot.slack_id}> please create shuffle lunch/i.match?(slack_parameter.text)
       end
 
-      def match_data
-        /\A<@#{bot.slack_id}> please create shuffle lunch(.*)/i.match(params[:event][:text])
+      def lunch_shuffle_request?
+        /\A.*<@#{bot.slack_id}> please create/i.match?(slack_parameter.text)
       end
 
-      def usernames
-        args = match_data[1].split.map { |username| username.strip.delete('@') }.uniq
-        args.shift == 'with' ? args : []
-      end
-
-      def slack_client
-        @client ||= Slack::Web::Client.new
+      def post_message(lunch)
+        if lunch
+          args = Slack::InteractiveComponent.new(lunch).as_json
+          args[:channel] = slack_parameter.channel_name
+        else
+          args = { text: 'Todo message' }
+        end
+        Slack::Web::Client.new.chat_postMessage(args)
       end
   end
 end

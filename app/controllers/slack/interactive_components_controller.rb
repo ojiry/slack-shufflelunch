@@ -15,10 +15,9 @@ class Slack::InteractiveComponentsController < ApplicationController
       lunch.participations.where(user_id: user.id).destroy_all
       GroupMember.joins(group: [:lunch]).merge(Lunch.shuffled.where(id: lunch.id)).where(user_id: user.id).destroy_all
     when 'shuffle'
-      GroupBuilder.new(lunch).build! unless lunch.shuffled?
+      LunchShuffler.new(lunch).shuffle! unless lunch.shuffled?
     when 'reshuffle'
-      lunch.groups.destroy_all
-      GroupBuilder.new(lunch).build!
+      LunchShuffler.new(lunch).reshuffle!
     when 'bye'
       render json: { text: "See you! :wave:" } and return
     end

@@ -64,7 +64,7 @@ RSpec.describe Slack::InteractiveComponent, type: :model do
 
       before do
         create :participation, lunch: lunch, user: user
-        GroupBuilder.new(lunch).build!
+        LunchShuffler.new(lunch).shuffle!
       end
 
       it { is_expected.to eq expected }
@@ -95,7 +95,7 @@ RSpec.describe Slack::InteractiveComponent, type: :model do
       let(:text) { "If you can't join Shuffle lunch, please put leave button" }
 
       before do
-        GroupBuilder.new(lunch).build!
+        LunchShuffler.new(lunch).shuffle!
       end
 
       it { is_expected.to eq expected }
@@ -115,7 +115,7 @@ RSpec.describe Slack::InteractiveComponent, type: :model do
 
     context "when lunch had shuffled" do
       before do
-        GroupBuilder.new(lunch).build!
+        LunchShuffler.new(lunch).shuffle!
       end
 
       it { is_expected.to eq "Shuffle lunch group of today\n1group: <@#{user.slack_id}>" }

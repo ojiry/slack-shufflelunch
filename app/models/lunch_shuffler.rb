@@ -1,11 +1,18 @@
-class GroupBuilder
+class LunchShuffler
   delegate :previous_lunch, to: :lunch
 
   def initialize(lunch)
     @lunch  = lunch
   end
 
-  def build!
+  def reshuffle!
+    ActiveRecord::Base.transaction do
+      lunch.groups.destroy_all
+      shuffle!
+    end
+  end
+
+  def shuffle!
     ActiveRecord::Base.transaction do
       1.upto(group_count) { |i| lunch.groups.create!(name: "#{i}group") }
       groups = lunch.groups.order(:name)

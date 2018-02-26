@@ -7,10 +7,6 @@ class ApplicationController < ActionController::API
       @slack_parameter ||= Slack::Parameter.parse(params)
     end
 
-    def slack_bot_username
-      Rails.configuration.x.slack.bot_username
-    end
-
     def slack_verification_token
       Rails.configuration.x.slack.verification_token
     end
