@@ -12,7 +12,7 @@ module Slack
       elsif lunch_shuffle_request? && !lunch&.shuffled?
         LunchShuffler.new(lunch).shuffle!
       end
-      post_message(lunch)
+      # post_message(lunch)
     end
 
     private

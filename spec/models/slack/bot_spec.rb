@@ -27,12 +27,12 @@ RSpec.describe Slack::Bot, type: :model do
 
     it { is_expected.to change { Lunch.count }.by(1) }
 
-    context "" do
-      before do
-        subject.call
-      end
+    # context "" do
+    #   before do
+    #     subject.call
+    #   end
 
-      it { expect(slack_bot).to have_received(:post_message).once }
-    end
+    #   it { expect(slack_bot).to have_received(:post_message).once }
+    # end
   end
 end
