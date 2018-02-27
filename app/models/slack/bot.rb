@@ -9,10 +9,11 @@ module Slack
       lunch = Lunch.joins(:channel).where(shuffled_at: nil).find_by(channels: { slack_id: slack_parameter.channel_id })
       if lunch_creating_request? && !lunch
         lunch = LunchBuilder.new(slack_parameter).build!
+        post_message(lunch)
       elsif lunch_shuffle_request? && !lunch&.shuffled?
         LunchShuffler.new(lunch).shuffle!
+        post_message(lunch)
       end
-      # post_message(lunch)
     end
 
     private
