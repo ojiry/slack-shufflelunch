@@ -91,7 +91,11 @@ module Slack
     end
 
     def response_type
-      "in_channel"
+      if ENV["DEBUG"].present?
+        "ephemeral"
+      else
+        "in_channel"
+      end
     end
   end
 end
