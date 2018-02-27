@@ -79,8 +79,8 @@ module Slack
         end
       elsif event_subscriptions?
         bot = User.find_by!(username: Rails.configuration.x.slack.bot_username)
-        return {} unless match_data = /\A.*<@#{bot.slack_id}> please create shuffle lunch with (.*)\./i.match(text)
-        user_slack_ids = match_data[1].split.map { |username| username.strip.delete('<@>') }.uniq
+        return {} unless match_data = /\A.*<@#{bot.slack_id}> please create shuffle lunch with (.*)/i.match(text)
+        user_slack_ids = match_data[1].split.map { |username| username.strip.delete('<@>.') }.uniq
         User.where(slack_id: user_slack_ids).each_with_object({}) do |user, usernames|
           usernames[user.slack_id] = user.username
         end
