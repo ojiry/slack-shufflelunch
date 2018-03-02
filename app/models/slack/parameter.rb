@@ -63,6 +63,14 @@ module Slack
       end
     end
 
+    def event_id
+      if event_subscriptions?
+        params[:event_id]
+      else
+        nil
+      end
+    end
+
     def event_type
       if event_subscriptions?
         params[:event][:type]
