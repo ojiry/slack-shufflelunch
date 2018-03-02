@@ -45,10 +45,9 @@ class LunchShuffler
     quotient, remainder = member_count.divmod(4)
     return 1 if quotient.zero?
     case remainder
-    when 0 then quotient
-    when 1 then quotient == 2 ? 3 : quotient
-    when 2 then quotient < 3 ? quotient + 1 : quotient
-    when 3..4 then quotient + 1
+    when 0..1 then quotient
+    when 2    then quotient == 1 ? quotient + 1 : quotient
+    when 3    then quotient + 1
     end
   end
 
