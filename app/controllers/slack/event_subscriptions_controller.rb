@@ -2,7 +2,7 @@ class Slack::EventSubscriptionsController < ApplicationController
   before_action :verify_challenge
 
   def create
-    if slack_parameter.event_type == 'message'
+    if slack_parameter.event_type == 'app_mention'
       Slack::Bot.new(slack_parameter).reply
     end
     head :ok
