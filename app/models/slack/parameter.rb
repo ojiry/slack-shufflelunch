@@ -85,7 +85,7 @@ module Slack
       elsif event_subscriptions?
         bot = User.find_by!(username: Rails.configuration.x.slack.bot_username)
         return [] unless match_data = /\A.*[<@#{bot.slack_id}>|<@#{bot.slack_id}\|#{bot.username}>] please create shuffle lunch with (.*)/i.match(text)
-        match_data[1].split.uniq.map { |username| Slack::Username.new(username).slack_id }
+        match_data[1].split.uniq.map { |username| Slack::Username.new(username) }
       else
         []
       end
