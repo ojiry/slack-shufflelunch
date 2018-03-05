@@ -79,22 +79,15 @@ module Slack
       end
     end
 
-    def preset_usernames_by_slack_id
+    def preset_slack_usernames
       if slash_commands?
-        text.strip.split.each_with_object({}) do |preset_username, usernames|
-          slack_id, username = preset_username.delete('<@>').split('|')
-          usernames[slack_id] = username
-        end
+        text.strip.split.uniq.map { |username| Slack::Username.new(username) }
       elsif event_subscriptions?
         bot = User.find_by!(username: Rails.configuration.x.slack.bot_username)
-        return {} unless match_data = /\A.*<@#{bot.slack_id}> please create shuffle lunch with (.*)/i.match(text)
-        user_slack_ids = match_data[1].split.map { |username| username.strip.delete('<@>.') }.uniq
-        User.where(slack_id: user_slack_ids).each_with_object({}) do |user, usernames|
-          usernames[user.slack_id] = user.username
-        end
-        # TODO Slack::Web::Client.new.user_info(user: user_id).user.name
+        return [] unless match_data = /\A.*[<@#{bot.slack_id}>|<@#{bot.slack_id}\|#{bot.username}>] please create shuffle lunch with (.*)/i.match(text)
+        match_data[1].split.uniq.map { |username| Slack::Username.new(username).slack_id }
       else
-        {}
+        []
       end
     end
 
