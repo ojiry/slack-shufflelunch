@@ -21,7 +21,7 @@ module Slack
       attr_reader :bot, :slack_parameter
 
       def lunch_creating_request?
-        /\A.*<@#{bot.slack_id}> please create shuffle lunch/i.match?(slack_parameter.text)
+        /\A.*[<@#{bot.slack_id}>|<@#{bot.slack_id}\|#{bot.username}>] please create shuffle lunch/i.match?(slack_parameter.text)
       end
 
       def lunch_shuffle_request?
