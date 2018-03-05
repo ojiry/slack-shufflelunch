@@ -10,7 +10,7 @@ module Slack
         username_text.include?('|') ? username_text.split('|').first : username_text
       else
         User.find_by_username(username_text)&.slack_id.presence ||
-          Slack::Web::Client.new.user_info(user: username_text).user.name
+          Slack::Web::Client.new.users_info(user: username_text).user.name
       end
     end
 
@@ -20,11 +20,11 @@ module Slack
           username_text.split('|').last
         else
           User.find_by_slack_id(username_text)&.username.presence ||
-            Slack::Web::Client.new.user_info(user: username_text).user.name
+            Slack::Web::Client.new.users_info(user: username_text).user.name
         end
       else
         User.find_by_username(username_text)&.username.presence ||
-          Slack::Web::Client.new.user_info(user: username_text).user.name
+          Slack::Web::Client.new.users_info(user: username_text).user.name
       end
     end
 

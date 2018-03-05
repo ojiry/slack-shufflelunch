@@ -169,7 +169,7 @@ module Slack
         payload_params[:user][:name]
       elsif event_subscriptions?
         User.find_by_slack_id(user_id)&.username.presence ||
-          Slack::Web::Client.new.user_info(user: user_id).user.name
+          Slack::Web::Client.new.users_info(user: user_id).user.name
       else
         nil
       end

@@ -31,11 +31,11 @@ RSpec.describe Slack::Username, type: :model do
 
       context "when a user that name is otako does not exist" do
         before do
-          # allow_any_instance_of(Slack::Web::Client).to receive(:user_info)
+          # allow_any_instance_of(Slack::Web::Client).to receive(:users_info)
           subject.call
         end
 
-        # it { expect_any_instance_of(Slack::Web::Client).to receive(:user_info) }
+        # it { expect_any_instance_of(Slack::Web::Client).to receive(:users_info) }
       end
     end
 
@@ -52,11 +52,11 @@ RSpec.describe Slack::Username, type: :model do
 
       context "when a user that name is otako does not exist" do
         before do
-          # allow_any_instance_of(Slack::Web::Client).to receive(:user_info)
+          # allow_any_instance_of(Slack::Web::Client).to receive(:users_info)
           subject.call
         end
 
-        # it { expect_any_instance_of(Slack::Web::Client).to receive(:user_info) }
+        # it { expect_any_instance_of(Slack::Web::Client).to receive(:users_info) }
       end
     end
 
@@ -94,11 +94,11 @@ RSpec.describe Slack::Username, type: :model do
 
       context "when a user that name is otako does not exist" do
         before do
-          # allow_any_instance_of(Slack::Web::Client).to receive(:user_info)
+          # allow_any_instance_of(Slack::Web::Client).to receive(:users_info)
           subject.call
         end
 
-        # it { expect_any_instance_of(Slack::Web::Client).to receive(:user_info) }
+        # it { expect_any_instance_of(Slack::Web::Client).to receive(:users_info) }
       end
     end
 
