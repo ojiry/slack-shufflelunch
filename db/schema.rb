@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_03_02_160745) do
+ActiveRecord::Schema.define(version: 2018_03_05_141312) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,13 @@ ActiveRecord::Schema.define(version: 2018_03_02_160745) do
     t.datetime "updated_at", null: false
     t.index ["slack_id"], name: "index_channels_on_slack_id", unique: true
     t.index ["team_id"], name: "index_channels_on_team_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "slack_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slack_id"], name: "index_events_on_slack_id", unique: true
   end
 
   create_table "group_members", force: :cascade do |t|
@@ -49,7 +56,6 @@ ActiveRecord::Schema.define(version: 2018_03_02_160745) do
     t.datetime "updated_at", null: false
     t.datetime "shuffled_at"
     t.string "response_url", null: false
-    t.string "event_id"
     t.index ["channel_id"], name: "index_lunches_on_channel_id"
     t.index ["user_id"], name: "index_lunches_on_user_id"
   end

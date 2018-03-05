@@ -6,7 +6,7 @@ module Slack
     end
 
     def reply
-      lunch = Lunch.joins(:channel).where(shuffled_at: nil).find_by(event_id: slack_parameter.event_id, channels: { slack_id: slack_parameter.channel_id })
+      lunch = Lunch.joins(:channel).where(shuffled_at: nil).find_by(channels: { slack_id: slack_parameter.channel_id })
       if lunch_creating_request? && !lunch
         lunch = LunchBuilder.new(slack_parameter).build!
         post_message(lunch)

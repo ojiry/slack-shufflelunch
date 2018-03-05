@@ -5,7 +5,7 @@ class LunchBuilder
 
   def build!
     ActiveRecord::Base.transaction do
-      lunch = creator.lunches.create!(channel_id: channel.id, response_url: slack_parameter.response_url, event_id: slack_parameter.event_id)
+      lunch = creator.lunches.create!(channel_id: channel.id, response_url: slack_parameter.response_url)
       preset_users = User.where(slack_id: slack_parameter.preset_slack_usernames.map(&:slack_id))
       participated_slack_ids = []
       preset_users.each do |preset_user|
