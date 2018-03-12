@@ -26,7 +26,7 @@ class UserCreator
     if user
       user.update!(username: username) unless user.username != username
     else
-      user = User.create!(slack_id: slack_id, username: username, team_id: team_id
+      user = User.create!(slack_id: slack_id, username: username, team_id: team_id)
     end
     user
   end
