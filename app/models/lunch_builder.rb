@@ -14,7 +14,7 @@ class LunchBuilder
       end
       slack_parameter.preset_slack_usernames.each do |slack_username|
         next if participated_slack_ids.include?(slack_username.slack_id)
-        user = team.users.create!(slack_id: slack_username.slack_id, username: slack_username.username)
+        user = UserCreator.create!(slack_id: slack_username.slack_id, username: slack_username.username, team_id: team.id)
         lunch.participations.create!(user: user)
       end
       lunch
@@ -30,7 +30,7 @@ class LunchBuilder
     end
 
     def creator
-      @creator ||= team.users.find_or_create_by!(slack_id: slack_parameter.user_id, username: slack_parameter.username)
+      @creator ||= UserCreator.create!(slack_id: slack_parameter.user_id, username: slack_parameter.username, team_id: team.id)
     end
 
     def team
