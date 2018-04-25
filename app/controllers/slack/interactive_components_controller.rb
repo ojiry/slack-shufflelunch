@@ -31,6 +31,6 @@ class Slack::InteractiveComponentsController < ApplicationController
     end
 
     def user
-      @user ||= team.users.find_or_create_by!(slack_id: slack_parameter.user_id, username: slack_parameter.username)
+      @user ||= UserCreator.create!(slack_id: slack_parameter.user_id, username: slack_parameter.username, team_id: team.id)
     end
 end
