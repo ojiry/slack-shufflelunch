@@ -1,5 +1,5 @@
 module Slack
-  class InteractiveComponent
+  class InteractiveMessage
     class Button
       def initialize(text, style: nil, confirm: nil)
         @name    = text.downcase

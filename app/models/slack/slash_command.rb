@@ -6,7 +6,7 @@ module Slack
 
     def as_json
       if lunch
-        Slack::InteractiveComponent.new(lunch).as_json
+        Slack::InteractiveMessage.new(lunch).as_json
       else
         { text: "Can't create Shuffle Lunch" }
       end
