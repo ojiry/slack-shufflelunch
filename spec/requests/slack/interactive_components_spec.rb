@@ -46,7 +46,7 @@ RSpec.describe "POST /slack/interactive_components", type: :request do
   it { expect(response).to have_http_status :ok }
 
   it 'returns interactive components json' do
-    expect(response.body).to eq Slack::InteractiveComponent.new(lunch.reload).as_json.to_json
+    expect(response.body).to eq Slack::InteractiveMessage.new(lunch.reload).as_json.to_json
   end
 
   context 'when unauthorized token' do

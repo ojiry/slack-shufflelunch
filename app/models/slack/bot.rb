@@ -30,7 +30,7 @@ module Slack
 
       def post_message(lunch)
         if lunch
-          args = Slack::InteractiveComponent.new(lunch).as_json
+          args = Slack::InteractiveMessage.new(lunch).as_json
           args[:channel] = slack_parameter.channel_name
         else
           args = { text: 'Todo message' }

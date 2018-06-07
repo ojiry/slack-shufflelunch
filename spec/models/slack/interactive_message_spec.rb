@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe Slack::InteractiveComponent, type: :model do
+RSpec.describe Slack::InteractiveMessage, type: :model do
   let(:user) { create :user }
   let(:lunch) { create :lunch }
-  let(:interactive_component) { Slack::InteractiveComponent.new(lunch) }
+  let(:interactive_component) { Slack::InteractiveMessage.new(lunch) }
 
   describe "#actions" do
     subject { interactive_component.send(:actions) }
