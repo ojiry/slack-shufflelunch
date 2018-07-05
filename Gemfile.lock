@@ -84,7 +84,7 @@ GEM
     minitest (5.11.3)
     multipart-post (2.0.0)
     nio4r (2.3.0)
-    nokogiri (1.8.2)
+    nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     pg (1.0.0)
     puma (3.11.4)
