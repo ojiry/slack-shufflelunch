@@ -60,7 +60,7 @@ GEM
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
     ffi (1.9.25)
-    gli (2.17.2)
+    gli (2.18.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     hashie (3.6.0)
@@ -137,7 +137,7 @@ GEM
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
     ruby_dep (1.5.0)
-    slack-ruby-client (0.12.0)
+    slack-ruby-client (0.13.0)
       activesupport
       faraday (>= 0.9)
       faraday_middleware
