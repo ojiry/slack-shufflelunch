@@ -17,7 +17,7 @@ jobs:
          environment:
            POSTGRES_USER: root
            POSTGRES_DB: circle-test_test
-      
+
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -46,7 +46,7 @@ jobs:
           paths:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-        
+
       # Database setup
       - run: bundle exec rake db:create
       - run: bundle exec rake db:schema:load

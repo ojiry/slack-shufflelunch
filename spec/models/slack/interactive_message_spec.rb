@@ -44,21 +44,8 @@ RSpec.describe Slack::InteractiveMessage, type: :model do
     context "when lunch had shuffled" do
       let(:expected) {
         [
-          { name: "leave", text: "Leave", style: "danger", type: "button", value: "leave" },
-          {
-            name: "reshuffle", text: "Reshuffle", type: "button", value: "reshuffle", confirm: {
-              title: "Are you sure?",
-              text: "If you put Reshuffle button, groups will change, right?",
-              ok_text: "Yes", dismiss_text: "No"
-            }
-          },
-          {
-            name: "bye", text: "Bye", type: "button", value: "bye", confirm: {
-              title: "Are you sure?",
-              text: "The result will be invisible, but is it good?",
-              ok_text: "Yes", dismiss_text: "No"
-            }
-          }
+          { name: "join", text: "Join", style: "primary", type: "button", value: "join" },
+          { name: "leave", text: "Leave", style: "danger", type: "button", value: "leave" }
         ]
       }
 

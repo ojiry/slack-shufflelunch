@@ -44,21 +44,16 @@ module Slack
 
     def actions
       buttons = []
-      buttons << Button.new("Join", style: "primary") unless lunch.shuffled?
+      buttons << Button.new("Join", style: "primary")
       buttons << Button.new("Leave", style: "danger")
-      if lunch.users.exists?
-        button_text, confirm_text =
-          if lunch.shuffled?
-            ["Reshuffle", "If you put Reshuffle button, groups will change, right?"]
-          else
-            ["Shuffle", "If you put Shuffle button, other members will be not able to entry lunch, right?"]
-          end
-        confirm = { title: "Are you sure?", text: confirm_text, ok_text: "Yes", dismiss_text: "No" }
-        buttons << Button.new(button_text, confirm: confirm)
-      end
-      if lunch.shuffled?
-        confirm = { title: "Are you sure?", text: "The result will be invisible, but is it good?", ok_text: "Yes", dismiss_text: "No" }
-        buttons << Button.new("Bye", confirm: confirm)
+      if lunch.users.exists? && !lunch.shuffled?
+        confirm = {
+          title: "Are you sure?",
+          text: "If you put Shuffle button, other members will be not able to entry lunch, right?",
+          ok_text: "Yes",
+          dismiss_text: "No"
+        }
+        buttons << Button.new("Shuffle", confirm: confirm)
       end
       buttons.map(&:as_json)
     end

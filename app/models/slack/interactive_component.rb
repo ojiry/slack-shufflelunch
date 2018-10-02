@@ -7,11 +7,7 @@ module Slack
     def as_json
       return { text: 'This lunch has already been deleted' } unless lunch
 
-      if slack_parameter.actions.first[:value] == 'bye'
-        { text: "See you! :wave:" }
-      else
-        Slack::InteractiveMessage.new(lunch).as_json
-      end
+      Slack::InteractiveMessage.new(lunch).as_json
     end
 
     def create!
@@ -20,16 +16,15 @@ module Slack
       @lunch.update(response_url: slack_parameter.response_url)
       case slack_parameter.actions.first[:value]
       when 'join'
-        if !@lunch.shuffled? && @lunch.participations.none? { |p| p.user_id == user.id }
+        if @lunch.participations.none? { |p| p.user_id == user.id }
           @lunch.participations.create(user: user)
         end
+        LunchShuffler.new(@lunch).reshuffle! if @lunch.shuffled?
       when 'leave'
         @lunch.participations.where(user_id: user.id).destroy_all
         GroupMember.joins(group: [:lunch]).merge(Lunch.shuffled.where(id: @lunch.id)).where(user_id: user.id).destroy_all
       when 'shuffle'
         LunchShuffler.new(@lunch).shuffle! unless @lunch.shuffled?
-      when 'reshuffle'
-        LunchShuffler.new(@lunch).reshuffle!
       end
     end
 
