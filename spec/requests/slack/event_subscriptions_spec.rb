@@ -23,6 +23,25 @@ RSpec.describe "POST /slack/event_subscriptions", type: :request do
   context 'when unauthorized token' do
     let(:token) { 'invalid_token' }
 
-    it { expect(response).to have_http_status(:forbidden) }
+    it { expect(response).to have_http_status :forbidden }
+  end
+
+  context "when type parameter is url_verification" do
+    let(:challenge) { "wWYpKluHySvOBgPZB9TEdKNoYVs5TKGoabJl2MH6JuHLUG8nL4mN" }
+    let(:params) {
+      {
+        token: token,
+        challenge: challenge,
+        type: "url_verification",
+        event_subscription: {
+          token: token,
+          challenge: challenge,
+          type: "url_verification",
+        }
+      }
+    }
+
+    it { expect(response).to have_http_status :ok }
+    it { expect(JSON.parse(response.body)["challenge"]).to eq challenge }
   end
 end
