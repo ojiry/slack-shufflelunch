@@ -13,7 +13,7 @@ module Slack
           :slash_commands
         elsif payload_params.present?
           :interactive_messages
-        elsif params[:event]
+        elsif params[:event] || params[:event_subscription]
           :event_subscriptions
         else
           :none
