@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-       - image: circleci/ruby:2.5.1
+       - image: circleci/ruby:2.6
          environment:
            RAILS_ENV: test
            PGHOST: 127.0.0.1
