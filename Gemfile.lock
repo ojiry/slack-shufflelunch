@@ -44,7 +44,7 @@ GEM
       tzinfo (~> 1.1)
     arel (9.0.0)
     builder (3.2.3)
-    byebug (10.0.2)
+    byebug (11.0.0)
     concurrent-ruby (1.1.4)
     crass (1.0.4)
     database_rewinder (0.9.1)
